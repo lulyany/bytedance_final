@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title><%= title %></title>
+	
+	<link rel="stylesheet" href="/stylesheets/style.css">
+	<link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">	
+
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js" integrity="sha384-q9CRHqZndzlxGLOj+xrdLDJa9ittGte1NksRmgJKeCV9DrM7Kz868XYqsKWPpAmn" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-YSu1vEueMOXZYSSiTgjRD6egOBAdWrKI6AQBdHjTtvftX42GZLCVzwlxm0RJuipa" crossorigin="anonymous"></script>	
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<body>
+	<header class="shadow">
+		<h1>Online Chat Room</h1>
+	</header>
+
+	<div id="main" class="main shadow">
+
+	</div>
+
+	<div class="send">
+		<input type="text" class="left" id="send-left" placeholder="please input words">
+		<!-- <input id="submit" class="right" type="submit" value="send"> -->
+		<button type="button" class="btn btn-primary">Primary</button>
+	</div>
+</body>
+
+
+
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+
+<script>
+	(function ($) {
+		var socket = io();
+		var uni = (function () {
+			var text = "";
+			var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+			for (var i = 0; i < 32; i++) {
+				text += possible.charAt(Math.floor(Math.random() * possible.length));
+			}
+			return text;
+		}());
+
+		// $("#submit").on("click", function() {
+		// 	var content = "<section class='chat-right'><img src='images/user.png'><span>" + $("#send-left").val() + "</span></section>";
+		// 	$("#main").append(content);
+		// 	$("#main").scrollTop($("#main").height());
+
+		// 	socket.emit('chat', $('#send-left').val(), uni);
+
+		// 	$("#send-left").val("");
+		// });
+
+		$("#send-left").on("keydown", function (e) {
+			if (e.which == 13) {
+				var content = "<section class='chat-right'><img src='images/user.png'><span>" + $("#send-left")
+					.val() + "</span></section>";
+				$("#main").append(content);
+				$("#main").scrollTop($("#main").height());
+
+				socket.emit('chat', $('#send-left').val(), uni);
+
+				$("#send-left").val("");
+			}
+		});
+
+		socket.on('chat', function (msg, id) {
+			if (id != uni) {
+				var content = "<section class='chat-left'><img src='images/user2.png'><span>" + msg +
+					"</span></section>";
+				$("#main").append(content);
+				$("#main").scrollTop($("#main").height());
+			};
+		});
+
+	})(jQuery);
+</script>
+
+
+</html>
