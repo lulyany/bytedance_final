@@ -7,7 +7,7 @@
 based on node.js & socket.io
 
 1. `npm install`
-2. `node ./bin/web `
+2. `node ./bin/web `or `npm run start`
 3. use more than one browser `127.0.0.1:3000`
 
 **Feature**
